@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Copy, Check, Share2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const generateCode = (): string => {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
@@ -31,26 +32,44 @@ const PasteInput: React.FC = () => {
 
     setIsGenerating(true);
     
-    // Simulate a small delay for effect
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const code = generateCode();
-    
-    // Store in localStorage (temporary solution until backend is connected)
-    const pastes = JSON.parse(localStorage.getItem('monkeypaste_pastes') || '{}');
-    pastes[code] = {
-      text: text,
-      createdAt: new Date().toISOString(),
-    };
-    localStorage.setItem('monkeypaste_pastes', JSON.stringify(pastes));
-    
-    setGeneratedCode(code);
-    setIsGenerating(false);
-    
-    toast({
-      title: "🐵 Paste Created!",
-      description: "Your unique code is ready to share.",
-    });
+    try {
+      const code = generateCode();
+      
+      const { error } = await supabase
+        .from('pastes')
+        .insert({ code, content: text });
+      
+      if (error) {
+        // If code already exists, try again with a new code
+        if (error.code === '23505') {
+          const newCode = generateCode();
+          const { error: retryError } = await supabase
+            .from('pastes')
+            .insert({ code: newCode, content: text });
+          
+          if (retryError) throw retryError;
+          setGeneratedCode(newCode);
+        } else {
+          throw error;
+        }
+      } else {
+        setGeneratedCode(code);
+      }
+      
+      toast({
+        title: "🐵 Paste Created!",
+        description: "Your unique code is ready to share.",
+      });
+    } catch (error) {
+      console.error('Error creating paste:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create paste. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const copyToClipboard = async (content: string) => {

@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const AccessPaste: React.FC = () => {
   const [code, setCode] = useState('');
@@ -27,20 +28,32 @@ const AccessPaste: React.FC = () => {
 
     setIsLoading(true);
     
-    // Small delay for effect
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    // Check if paste exists in localStorage
-    const pastes = JSON.parse(localStorage.getItem('monkeypaste_pastes') || '{}');
-    
-    if (pastes[code.trim()]) {
-      navigate(`/paste/${code.trim()}`);
-    } else {
+    try {
+      const { data, error } = await supabase
+        .from('pastes')
+        .select('code')
+        .eq('code', code.trim())
+        .maybeSingle();
+      
+      if (error) throw error;
+      
+      if (data) {
+        navigate(`/paste/${data.code}`);
+      } else {
+        toast({
+          title: "Paste not found",
+          description: "The code you entered doesn't exist. Please check and try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error accessing paste:', error);
       toast({
-        title: "Paste not found",
-        description: "The code you entered doesn't exist. Please check and try again.",
+        title: "Error",
+        description: "Failed to access paste. Please try again.",
         variant: "destructive",
       });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -71,7 +84,7 @@ const AccessPaste: React.FC = () => {
                   <input
                     type="text"
                     value={code}
-                    onChange={(e) => setCode(e.target.value.toUpperCase())}
+                    onChange={(e) => setCode(e.target.value)}
                     placeholder="Enter paste code"
                     maxLength={10}
                     className="w-full h-14 px-4 rounded-2xl bg-secondary border border-border text-foreground text-center text-2xl font-mono tracking-widest placeholder:text-muted-foreground placeholder:text-base placeholder:font-nunito placeholder:tracking-normal focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300"
@@ -100,7 +113,7 @@ const AccessPaste: React.FC = () => {
               </form>
 
               <p className="text-center text-sm text-muted-foreground mt-6">
-                The code is case-insensitive
+                The code is case-sensitive
               </p>
             </div>
           </div>
