@@ -1,13 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
+import Navbar from '@/components/Navbar';
+import HeroSection from '@/components/HeroSection';
+import PasteInput from '@/components/PasteInput';
+import Footer from '@/components/Footer';
 
-const Index = () => {
+const Index: React.FC = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <>
+      <Helmet>
+        <title>MonkeyPaste - Simple & Fast Anonymous Text Sharing</title>
+        <meta name="description" content="Share text instantly with MonkeyPaste. Paste your text, get a unique code, and share with anyone. No signup needed!" />
+      </Helmet>
+      
+      <div className="min-h-screen gradient-hero">
+        <Navbar />
+        <main>
+          <HeroSection />
+          <PasteInput />
+        </main>
+        <Footer />
       </div>
-    </div>
+    </>
   );
 };
 
