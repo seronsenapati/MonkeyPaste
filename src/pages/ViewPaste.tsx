@@ -1,40 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Copy, Check, ArrowLeft, FileText, Clock } from 'lucide-react';
+import { Copy, Check, ArrowLeft, FileText, Clock, Loader2 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PasteData {
-  text: string;
-  createdAt: string;
+  content: string;
+  created_at: string;
 }
 
 const ViewPaste: React.FC = () => {
   const { code } = useParams<{ code: string }>();
   const [paste, setPaste] = useState<PasteData | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    if (code) {
-      const pastes = JSON.parse(localStorage.getItem('monkeypaste_pastes') || '{}');
-      const foundPaste = pastes[code.toUpperCase()] || pastes[code];
-      
-      if (foundPaste) {
-        setPaste(foundPaste);
-      } else {
+    const fetchPaste = async () => {
+      if (!code) {
         setNotFound(true);
+        setIsLoading(false);
+        return;
       }
-    }
+
+      try {
+        const { data, error } = await supabase
+          .from('pastes')
+          .select('content, created_at')
+          .eq('code', code)
+          .maybeSingle();
+        
+        if (error) throw error;
+        
+        if (data) {
+          setPaste(data);
+        } else {
+          setNotFound(true);
+        }
+      } catch (error) {
+        console.error('Error fetching paste:', error);
+        setNotFound(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPaste();
   }, [code]);
 
   const copyToClipboard = async () => {
     if (paste) {
-      await navigator.clipboard.writeText(paste.text);
+      await navigator.clipboard.writeText(paste.content);
       setCopied(true);
       toast({
         title: "Copied!",
@@ -54,6 +76,29 @@ const ViewPaste: React.FC = () => {
       minute: '2-digit',
     });
   };
+
+  if (isLoading) {
+    return (
+      <>
+        <Helmet>
+          <title>Loading... - MonkeyPaste</title>
+        </Helmet>
+        
+        <div className="min-h-screen gradient-hero flex flex-col">
+          <Navbar />
+          
+          <main className="flex-1 flex items-center justify-center px-4 pt-24 pb-12">
+            <div className="text-center animate-slide-up">
+              <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading paste...</p>
+            </div>
+          </main>
+
+          <Footer />
+        </div>
+      </>
+    );
+  }
 
   if (notFound) {
     return (
@@ -114,11 +159,11 @@ const ViewPaste: React.FC = () => {
                     <FileText className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h1 className="text-xl font-bold text-foreground">Paste: {code?.toUpperCase()}</h1>
+                    <h1 className="text-xl font-bold text-foreground">Paste: {code}</h1>
                     {paste && (
                       <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                         <Clock size={14} />
-                        {formatDate(paste.createdAt)}
+                        {formatDate(paste.created_at)}
                       </div>
                     )}
                   </div>
@@ -137,7 +182,7 @@ const ViewPaste: React.FC = () => {
               {paste && (
                 <div className="bg-secondary/50 rounded-2xl p-4 sm:p-6 border border-border">
                   <pre className="whitespace-pre-wrap break-words text-foreground font-nunito text-base leading-relaxed">
-                    {paste.text}
+                    {paste.content}
                   </pre>
                 </div>
               )}
