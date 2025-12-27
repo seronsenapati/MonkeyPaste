@@ -1,73 +1,145 @@
-# Welcome to your Lovable project
+# Monkey Paste Share
 
-## Project info
+<p align="center">
+  <img src="monkey_favicon.svg" alt="Monkey Logo" width="120" height="120">
+</p>
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+<p align="center">
+  <h1 align="center">Share text like a monkey shares bananas 🍌</h1>
+</p>
 
-## How can I edit this code?
+<p align="center">
+  <em>Simple, fast, and secure pastebin service built with React, TypeScript, and Supabase</em>
+</p>
 
-There are several ways of editing your application.
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#database">Database</a>
+</p>
 
-**Use Lovable**
+## Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- 🐵 **Instant Text Sharing**: Share text with a unique 6-digit code
+- 🛡️ **No Signup Required**: Anonymous sharing without account creation
+- 🔐 **Secure & Private**: Each paste has a unique code for access
+- 📋 **Easy Access**: Access pastes via code or shareable link
+- 📱 **Responsive Design**: Works on all device sizes
+- ⚡ **Lightning Fast**: Built with modern web technologies
+- 🎨 **Beautiful UI**: Clean, modern interface with animations
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Tech Stack
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Frontend**: React, TypeScript, Vite
+- **UI Components**: shadcn/ui, Tailwind CSS
+- **Database**: Supabase (PostgreSQL)
+- **State Management**: React Query
+- **Icons**: Lucide React
+- **Form Handling**: React Hook Form
+- **Styling**: Tailwind CSS with custom animations
 
-## How can I deploy this project?
+## Database Schema
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+The application uses a Supabase PostgreSQL database with the following schema:
 
-## Can I connect a custom domain to my Lovable project?
+```sql
+CREATE TABLE public.pastes (
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  code TEXT NOT NULL UNIQUE,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+```
 
-Yes, you can!
+The database has Row Level Security (RLS) enabled with policies allowing anyone to create and read pastes.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Installation
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- Supabase account
+
+### Setup
+
+1. **Clone the repository**:
+
+```bash
+git clone <YOUR_GIT_URL>
+cd monkey-paste-share
+```
+
+2. **Install dependencies**:
+
+```bash
+npm install
+```
+
+3. **Set up environment variables**:
+
+Create a `.env` file in the root directory and add your Supabase credentials:
+
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+```
+
+4. **Run the development server**:
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`.
+
+## Usage
+
+1. Visit the homepage
+2. Enter your text in the text area
+3. Click "Share MonkeyPaste" to create a unique code and shareable link
+4. Share the code or link with others
+5. Others can access your paste by entering the 6-digit code or visiting the link
+
+## API Endpoints
+
+- `GET /` - Home page with create/access interface
+- `GET /paste/:code` - View paste by code
+- `GET /access` - Access page for entering paste codes
+
+## Environment Variables
+
+- `VITE_SUPABASE_URL` - Your Supabase project URL
+- `VITE_SUPABASE_PUBLISHABLE_KEY` - Your Supabase anon key
+
+## Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── hooks/          # Custom React hooks
+├── integrations/   # Third-party integrations (Supabase)
+├── lib/            # Utility functions and business logic
+└── pages/          # Page components
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Commit your changes (`git commit -m 'Add some amazing feature'`)
+5. Push to the branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+If you encounter any issues or have questions, please file an issue in the repository.
