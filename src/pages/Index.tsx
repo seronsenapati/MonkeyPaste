@@ -220,10 +220,7 @@ const Index = () => {
                             </div>
                             <div>
                               <h2
-                                className="text-xl font-bold"
-                                style={{
-                                  fontFamily: "'Space Grotesk', sans-serif",
-                                }}
+                                className="text-xl font-bold font-space-grotesk"
                               >
                                 Create MonkeyPaste
                               </h2>
@@ -377,10 +374,7 @@ const Index = () => {
                             </div>
                             <div>
                               <h2
-                                className="text-xl font-bold"
-                                style={{
-                                  fontFamily: "'Space Grotesk', sans-serif",
-                                }}
+                                className="text-xl font-bold font-space-grotesk"
                               >
                                 Access MonkeyPaste
                               </h2>

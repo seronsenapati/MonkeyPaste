@@ -89,8 +89,8 @@ const AccessPaste = () => {
               
               {/* Heading */}
               <h1 
-                className="mb-2 text-3xl xs:text-4xl font-black tracking-tight sm:text-5xl animate-fade-in"
-                style={{ animationDelay: '0.1s', fontFamily: "'Space Grotesk', sans-serif" }}
+                className="mb-2 text-3xl xs:text-4xl font-black tracking-tight sm:text-5xl animate-fade-in font-space-grotesk"
+                style={{ animationDelay: '0.1s' }}
               >
                 Access <span className="">MonkeyPaste</span>
               </h1>

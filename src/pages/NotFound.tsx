@@ -59,8 +59,8 @@ const NotFound = () => {
               </div>
               
               <h1 
-                className="mb-4 text-4xl font-black tracking-tight sm:text-5xl animate-fade-in"
-                style={{ animationDelay: '0.1s', fontFamily: "'Space Grotesk', sans-serif" }}
+                className="mb-4 text-4xl font-black tracking-tight sm:text-5xl animate-fade-in font-space-grotesk"
+                style={{ animationDelay: '0.1s' }}
               >
                 Page Not <span className="text-destructive">Found</span>
               </h1>

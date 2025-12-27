@@ -131,8 +131,7 @@ const PasteViewer = () => {
                         <div>
                           <div>
                             <h1 
-                              className="text-xl xs:text-2xl font-black"
-                              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                              className="text-xl xs:text-2xl font-black font-space-grotesk"
                             >
                               MonkeyPaste Shared
                             </h1>
@@ -204,8 +203,7 @@ const PasteViewer = () => {
                     </div>
                     <div>
                       <h2 
-                        className="text-2xl font-black mb-3"
-                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                        className="text-2xl font-black mb-3 font-space-grotesk"
                       >
                         MonkeyPaste Not Found
                       </h2>
