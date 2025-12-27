@@ -1,16 +1,10 @@
 # Monkey Paste Share
 
-<p align="center">
-  <img src="monkey_favicon.svg" alt="Monkey Logo" width="120" height="120">
-</p>
+Share text like a monkey shares bananas 🍌
 
-<p align="center">
-  <h1 align="center">Share text like a monkey shares bananas 🍌</h1>
-</p>
+Simple, fast, and secure pastebin service built with React, TypeScript, and Supabase
 
-<p align="center">
-  <em>Simple, fast, and secure pastebin service built with React, TypeScript, and Supabase</em>
-</p>
+[![Deployed on Netlify](https://img.shields.io/badge/Deployed%20on-Netlify-00C7B7?style=for-the-badge&logo=netlify)](https://monkeypaste.netlify.app/)
 
 <p align="center">
   <a href="#features">Features</a> •
@@ -29,6 +23,10 @@
 - 📱 **Responsive Design**: Works on all device sizes
 - ⚡ **Lightning Fast**: Built with modern web technologies
 - 🎨 **Beautiful UI**: Clean, modern interface with animations
+
+## Live Demo
+
+Check out the live application: [MonkeyPaste](https://monkeypaste.netlify.app/)
 
 ## Tech Stack
 
