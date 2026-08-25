@@ -1,4 +1,4 @@
-const { connectDB, Paste } = require('./db');
+import { connectDB, Paste } from './db.js';
 
 function generateCode() {
   const chars = '0123456789';
@@ -9,7 +9,7 @@ function generateCode() {
   return code;
 }
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {

@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Cache DB connection across warm function invocations (serverless best practice)
 let cachedConnection = null;
 
-async function connectDB() {
+export async function connectDB() {
   if (cachedConnection && mongoose.connection.readyState === 1) {
     return cachedConnection;
   }
@@ -18,6 +18,4 @@ const PasteSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now },
 });
 
-const Paste = mongoose.models.Paste || mongoose.model('Paste', PasteSchema);
-
-module.exports = { connectDB, Paste };
+export const Paste = mongoose.models.Paste || mongoose.model('Paste', PasteSchema);

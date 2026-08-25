@@ -1,6 +1,6 @@
-const { connectDB, Paste } = require('./db');
+import { connectDB, Paste } from './db.js';
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   // Only allow GET
   if (event.httpMethod !== 'GET') {
     return {
